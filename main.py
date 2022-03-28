@@ -55,6 +55,8 @@ async def on_message(message):
         # Sets a 'D' on the '_Discord' column corresponding to that 'padron' and reacts
         # to the message
         alumnos.loggedInDiscord(id_padron)
+        role = discord.utils.get(client.guilds[0].roles, name='1C2022')
+        await message.author.add_roles(role)
         await message.add_reaction('\N{THUMBS UP SIGN}')
 
 client.run(TOKEN)
