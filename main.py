@@ -1,6 +1,6 @@
 import os
 import discord
-from dsheet import Datasheet
+from data_sheet import Datasheet
 from dotenv import load_dotenv
 
 load_dotenv()
