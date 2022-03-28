@@ -12,7 +12,6 @@ CHANNEL_NAME="administrativo-ingreso"
 client = discord.Client()
 
 """ When connected, prints the a list of every server using it"""
-
 @client.event
 async def on_ready():
         print(f"{client.user} se conecto a Discord!")
@@ -22,10 +21,9 @@ async def on_ready():
             print(f"{guild}")
 
 
-"""This function read a new message only if it was sent on the Channel name specified when
-    instanced. If a number, the bot adds checks that 'padron' over the spreadsheet given,
+"""This function reads a new message only if it was sent on the Channel name specified when
+    instanced. If a number, the bot checks that 'padron' over the spreadsheet given,
     adds a 'D' on its '_Discord' column, and reacts to the message"""
-
 @client.event
 async def on_message(message):
         # If my message or not in the correct channel dont do nothing
