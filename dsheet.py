@@ -10,12 +10,12 @@ from googleapiclient.errors import HttpError
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
 # The ID and range of a sample spreadsheet.
-SPREADSHEET_ID = '1SVEIbG5q_UVfa-eWMuo_b8OdF_LNjmPjV6vQ7dpt62Y'
-RANGE_NAME = 'Alumnos!A1:H100'
+RANGE_NAME = 'Alumnos!A1:G100' # Hardcodeado por ahora porque ni idea como cambiarlo
 
 class Datasheet():
-    def __init__(self, creds_path):
-
+    def __init__(self, creds_path, spreadsheetId):
+        self.spreadsheetId = spreadsheetId
+        
         if os.path.exists(creds_path):
             credentials = Credentials.from_service_account_file(
                 filename=creds_path,
@@ -27,7 +27,7 @@ class Datasheet():
 
             # Call the Sheets API
             sheet = self.service.spreadsheets()
-            result = sheet.values().get(spreadsheetId=SPREADSHEET_ID,
+            result = sheet.values().get(spreadsheetId=spreadsheetId,
                                         range=RANGE_NAME).execute()
             self.values = result.get('values', [])
 
@@ -35,12 +35,13 @@ class Datasheet():
                 print('No data found.')
                 return
 
-            self.alumnos = {0: "Ejemplo"}
+            self.alumnos = {}
 
-            for row in self.values[1:]:
+            header = self.values[0]
+            for row in self.values[1:]: # Skip the first as is the header
                 if(row == []):
                     break
-                self.alumnos.update({int(row[1]): row[0]})
+                self.alumnos.update({int(row[header.index('padron')]): row[header.index('nombre')]})
 
 
         except HttpError as err:
@@ -52,20 +53,23 @@ class Datasheet():
     def getName(self, padron):
         return self.alumnos.get(padron)
 
-    def inDiscord(self, padron):
+    def loggedInDiscord(self, padron, text='D'):
         for row in self.values[1:]:
             if row == []:
                 break
             
             if(padron != int(row[1])):
                 continue
-            row.append('A')
-            row.append('A')
-            row[5] = 'D'
+
+            discordIndex = self.values[0].index('_Discord')
+            while(len(row) <= discordIndex):
+                row.append('')
+
+            row[discordIndex] = text
         
         body = {'values': self.values}
 
         result = self.service.spreadsheets().values().update(
-            spreadsheetId=SPREADSHEET_ID, range=RANGE_NAME,
-            valueInputOption="USER_ENTERED", body=body).execute()
+            spreadsheetId=self.spreadsheetId, range=RANGE_NAME,
+            valueInputOption='RAW', body=body).execute()
         print('{0} cells updated.'.format(result.get('updatedCells')))
