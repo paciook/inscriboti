@@ -2,6 +2,7 @@ import os
 import discord
 from data_sheet import Datasheet
 from dotenv import load_dotenv
+from re import findall
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -30,12 +31,12 @@ async def on_message(message):
         if message.author == client.user or message.channel.name != CHANNEL_NAME:
             return
 
-        # Thumbs down if it's not an int
-        if(not message.content.isnumeric()):
-            await message.add_reaction('\N{THUMBS DOWN SIGN}')
-            return
+        # Find a 5 or 6 digit number in the message
+        padron = findall(r'(?<!\d)\d{5,6}(?!\d)', message.content)
+        if (len(padron) != 1):
+          return
 
-        id_padron = int(message.content)
+        id_padron = int(padron[0])
         alumnos = Datasheet(creds_path='credentials.json', spreadsheetId=SPREADSHEET_ID)
 
         # Search for the 'padron' on the spreadsheet. If not there, says it and leaves        
