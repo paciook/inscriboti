@@ -16,6 +16,7 @@ class Datasheet():
     def __init__(self, creds_path, spreadsheetId):
         self.spreadsheetId = spreadsheetId
         
+        credentials = None
         if os.path.exists(creds_path):
             credentials = Credentials.from_service_account_file(
                 filename=creds_path,
