@@ -8,6 +8,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 SPREADSHEET_ID = os.getenv('SPREADSHEET_ID')
 CHANNEL_NAME="administrativo-ingreso"
+ROLE_NAME='2C2022'
 
 # Creating the connection with the Discord servers
 client = discord.Client()
@@ -54,7 +55,7 @@ async def on_message(message):
         # Sets a 'D' on the '_Discord' column corresponding to that 'padron' and reacts
         # to the message
         alumnos.loggedInDiscord(id_padron)
-        role = discord.utils.get(client.guilds[0].roles, name='1C2022')
+        role = discord.utils.get(message.guild.roles, name=ROLE_NAME)
         await message.author.add_roles(role)
         await message.add_reaction('\N{THUMBS UP SIGN}')
 
