@@ -42,7 +42,7 @@ class Datasheet():
             for row in self.values[1:]: # Skip the first as is the header
                 if(row == []):
                     break
-                self.alumnos.update({int(row[header.index('padron')]): row[header.index('nombre')]})
+                self.alumnos.update({int(row[header.index('Padrón')]): row[header.index('Nombre')]})
 
 
         except HttpError as err:
