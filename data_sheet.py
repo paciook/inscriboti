@@ -62,12 +62,12 @@ class Datasheet():
             if(padron != int(row[1])):
                 continue
 
-            discordIndex = self.values[0].index('_Discord')
+            col_number = self.values[0].index('_Discord')
             row_number = self.values.index(row) + 1
         
         body = {'values': [[text]]}
 
         result = self.service.spreadsheets().values().update(
-            spreadsheetId=self.spreadsheetId, range='F' + str(row_number),
+            spreadsheetId=self.spreadsheetId, range=chr(ord('@')+col_number+1) + str(row_number),
             valueInputOption='RAW', body=body).execute()
         print('{0} cells updated.'.format(result.get('updatedCells')))
