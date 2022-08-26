@@ -63,14 +63,11 @@ class Datasheet():
                 continue
 
             discordIndex = self.values[0].index('_Discord')
-            while(len(row) <= discordIndex):
-                row.append('')
-
-            row[discordIndex] = text
+            row_number = self.values.index(row) + 1
         
-        body = {'values': self.values}
+        body = {'values': [[text]]}
 
         result = self.service.spreadsheets().values().update(
-            spreadsheetId=self.spreadsheetId, range=RANGE_NAME,
+            spreadsheetId=self.spreadsheetId, range='F' + str(row_number),
             valueInputOption='RAW', body=body).execute()
         print('{0} cells updated.'.format(result.get('updatedCells')))
