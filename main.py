@@ -7,8 +7,8 @@ from re import findall
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 SPREADSHEET_ID = os.getenv('SPREADSHEET_ID')
+ROLE_NAME = os.getenv('ROLE_NAME')
 CHANNEL_NAME="administrativo-ingreso"
-ROLE_NAME='2C2022'
 
 # Creating the connection with the Discord servers
 client = discord.Client()
